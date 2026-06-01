@@ -1,0 +1,15 @@
+# Docker data
+.docker/
+
+# OpenFOAM large data / mesh / results
+# 計算結果（大量のデータ）をGit管理から外したい場合は、以下のコメントを外してください
+# work/platforms/
+# work/postProcessing/
+# **/polyMesh/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Rclone config (Contains credentials)
+config/rclone/rclone.conf
