@@ -1,40 +1,53 @@
-# OpenFOAM 13 Docker 操作マニュアル
+# OpenFOAM 13 Docker 操作マニュアル (更新版)
 
-## 1. GUI (ParaView) へのアクセス
+## 1. 環境の概要
+- **OS:** Ubuntu 22.04
+- **OpenFOAM:** version 13 (Foundation版)
+- **保存場所:** 
+  - プログラム・設定: C:\Users\tomar\OpenFOAM-Docker (ローカルCドライブ)
+  - 解析データ: /home/foam/work/ (ホスト側の work フォルダと同期)
+
+## 2. GUI (ParaView) へのアクセス
 ブラウザで以下のURLを開きます。
-URL: [http://localhost:6080/vnc.html](http://localhost:6080/vnc.html)
-パスワード: \oam123
-- 左下のメニュー（または右クリック）からターミナルを起動できます。
-- ターミナルで \paraview\ または \paraFoam\ と入力すると可視化ツールが起動します。
+URL: http://localhost:6080/vnc.html
+パスワード: foam123
 
-## 2. Git 設定
-Gitの設定（User: tommun, Email: tom.arufa@gmail.com）は完了しています。
-GitHubとの連携にSSHが必要な場合は、コンテナ内で \ssh-keygen\ を実行し、公開鍵をGitHubに登録してください。
+- **ParaViewの起動:** ターミナルで paraview と入力します。
+- **解析データの読み込み:** 
+  解析ディレクトリに移動し、touch result.foam を実行してから ParaView でそのファイルを開くとスムーズです。
 
-## 3. Google Drive (rclone) の初期設定
-Google Driveを接続するには、以下の手順で認証を行ってください。
+## 3. Git によるバージョン管理
+プロジェクト全体が Git で管理されています。変更を加えたら履歴を残すことを推奨します。
+ホスト側（Windows）のターミナルで以下を実行：
+```bash
+cd C:\Users\tomar\OpenFOAM-Docker
+git add .
+git commit -m "解析ケースの追加"
+```
 
-1. コンテナ内で設定を開始：
-   \\ash
-   rclone config
-   \2. \ (New remote) を選択。
-3. 名前を \gdrive\ にします。
-4. ストレージタイプで \drive\ (Google Drive) を選択（通常は18番付近）。
-5. \client_id\ / \client_secret\ は空欄のままエンター。
-6. \scope\ は \1\ (Full access) を選択。
-7. \service_account_file\ は空欄のままエンター。
-8. \Edit advanced config\ は \ (No)。
-9. \Use auto config\ は **必ず \ (No)** を選択してください（コンテナにブラウザがないため）。
-10. 表示されたURLをホスト（Windows）のブラウザで開き、認証コードを取得してコンテナに貼り付けます。
-11. \Configure this as a Shared Drive?\ は \ (No)。
-12. 最後に \y\ (Yes this is OK) を選択して終了します。
+## 4. 旧環境 (VirtualBox VM) からの移行データ
+旧VM「あばばばあ」から以下のデータを移行済みです。
+- **場所:** /home/foam/work/ 直下
+- **内容:** Univ/ (大学関連データ), sphere_test/, constant/
+※VM内では OpenFOAM-v2512 が使われていましたが、現在の環境は OpenFOAM 13 です。
 
-## 4. Google Drive のマウント
-設定完了後、以下のコマンドでマウントできます：
-\\ash
+## 5. Google Drive へのバックアップ (rclone)
+ローカルのCドライブで計算を行い、完了した重要なデータのみを Google Drive へ同期する運用を推奨します。
+
+### 初期設定 (未完了の場合)
+1. コンテナ内で rclone config を実行。
+2. 名前を gdrive、タイプを drive に設定。
+3. Use auto config? で n (No) を選び、ブラウザで認証。
+
+### 同期コマンド
+```bash
+# Gドライブをマウント
 rclone mount gdrive: /home/foam/gdrive --daemon
-\これで \/home/foam/gdrive\ フォルダ経由でファイルの読み書きが可能になります。
 
-## 5. ファイルの保存
-- \/home/foam/work\ に保存したファイルは、ホスト側の \OpenFOAM-Docker/work\ フォルダと同期されます。
-- \/home/foam/gdrive\ に保存したファイルは、Google Driveと同期されます。
+# データのコピー (例: Univフォルダをバックアップ)
+cp -r /home/foam/work/Univ /home/foam/gdrive/Backup/
+```
+
+## 6. 注意事項
+- **日本語ファイル名:** VMから移行したファイルに日本語が含まれています。ParaView等でエラーが出る場合は、アルファベット名にリネームしてください。
+- **ディスク容量:** Cドライブの空き容量にご注意ください。

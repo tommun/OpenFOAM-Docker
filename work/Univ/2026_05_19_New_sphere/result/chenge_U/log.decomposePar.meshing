@@ -1,0 +1,76 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 13-441953dfbb42
+Exec   : decomposePar
+Date   : Jun 01 2026
+Time   : 08:07:18
+Host   : "f10fa328edb5"
+PID    : 1144
+I/O    : uncollated
+Case   : /home/foam/work/Univ/2026_05_19_New_sphere/result/chenge_U
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Calculating distribution of cells
+
+Selecting decomposer scotch
+
+Finished decomposition in 0.021094 s
+
+Calculating original mesh data
+
+Distributing cells to processors
+
+Distributing faces to processors
+
+Distributing points to processors
+
+Constructing processor meshes
+
+Processor 0
+    Number of cells = 5508
+    Number of faces shared with processor 1 = 324
+    Number of processor patches = 1
+    Number of processor faces = 324
+    Number of boundary faces = 1548
+
+Processor 1
+    Number of cells = 5508
+    Number of faces shared with processor 0 = 324
+    Number of processor patches = 1
+    Number of processor faces = 324
+    Number of boundary faces = 1548
+
+Number of processor faces = 324
+Max number of cells = 5508 (0% above average 5508)
+Max number of processor patches = 1 (0% above average 1)
+Max number of faces between processors = 324 (0% above average 324)
+
+Time = 0s
+
+Decomposing FV fields
+
+    Decomposing volScalarFields
+
+        p
+
+    Decomposing volVectorFields
+
+        U
+
+Decomposing point fields
+
+    (no point fields)
+
+End
+

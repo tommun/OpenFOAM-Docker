@@ -1,0 +1,31 @@
+# Wavefront OBJ file written 2026-06-01T08:07:18
+o Cuboid_edgeMesh
+
+# points : 8
+# lines  : 12
+
+# <points count="8">
+v -0.3 0.3 0.3
+v -0.3 0.3 -0.3
+v -0.3 -0.3 0.3
+v -0.3 -0.3 -0.3
+v 1 -0.3 0.3
+v 1 0.3 -0.3
+v 1 0.3 0.3
+v 1 -0.3 -0.3
+# </points>
+
+# <edges count="12">
+l 1 2
+l 3 1
+l 4 3
+l 2 4
+l 6 7
+l 7 5
+l 5 8
+l 8 6
+l 4 8
+l 5 3
+l 6 2
+l 1 7
+# </edges>

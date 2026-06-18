@@ -1,0 +1,46 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    0;
+    object      p;
+}
+dimensions [0 2 -2 0 0 0 0];
+internalField uniform 0.0;
+boundaryField
+{
+    Region
+    {
+        type zeroGradient;
+    }
+    XMin
+    {
+        type zeroGradient;
+    }
+    XMax
+    {
+        type fixedValue;
+        value uniform 0.0;
+    }
+    YMin
+    {
+        type zeroGradient;
+    }
+    YMax
+    {
+        type zeroGradient;
+    }
+    ZMin
+    {
+        type zeroGradient;
+    }
+    ZMax
+    {
+        type zeroGradient;
+    }
+    defaultFaces
+    {
+        type zeroGradient;
+    }
+}

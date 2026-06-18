@@ -1,0 +1,39 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 13-441953dfbb42
+Exec   : reconstructPar -constant
+Date   : Jun 03 2026
+Time   : 03:22:00
+Host   : "f10fa328edb5"
+PID    : 1124
+I/O    : uncollated
+Case   : /home/foam/work/Univ/20180923_3D_sphere/result/ana00101/ana00101
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reconstructing meshes
+
+    Merging mesh 0 with 1
+
+Time = constant
+
+Reconstructing FV fields
+
+    (no FV fields)
+
+Reconstructing point fields
+
+    (no point fields)
+
+End
+

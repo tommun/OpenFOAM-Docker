@@ -1,0 +1,144 @@
+#!/bin/sh
+cd ${0%/*} || exit 1
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+export OMPI_MCA_orte_set_default_slots=$(getNumberOfProcessors)
+export OMPI_MCA_prte_set_default_slots=$(getNumberOfProcessors)
+show_help() {
+    echo "Usage: Allrun [OPTIONS]"
+    echo "options:"
+    echo "  -m, --onlyMesh  make only meshes"
+    echo "  -h, --help      print the usage"
+    echo "  -i, --info      show project information"
+    echo "  -y, --yes       enter yes for all checks"
+    echo ""
+    exit 1
+}
+show_info() {
+    echo "This project was exported from XSim (https://xsim.work)."
+    echo "For OpenFOAM 12."
+    echo ""
+    exit 1
+}
+get_num_labels() ( set -f; set -- $1; echo $# )
+monitor() {
+    local solverPID=$1
+    local logFile=$2
+    
+    while [ ! -f $logFile ]; do
+        sleep 1
+    done
+    while [ $(wc -l < "$logFile") -lt 5 ]; do
+        sleep 1
+    done
+    
+    # Note that the numLabels includes "#"
+    local labels
+    labels=$(grep -E '^#' $logFile | tail -1)
+    if [ "x$labels" = "x" ]; then
+        labels="# Step"
+    fi
+    local numLabels=$(get_num_labels "$labels")
+    local numColumn=$(tail -2 $logFile | head -1 | awk '{print NF}')
+    
+    local i=0
+    while [ "$numLabels" -le "$numColumn" ]; do
+        i=$(expr $i + 1)
+        labels="$labels data$i"
+        numLabels=$(get_num_labels "$labels")
+    done
+    
+    local xAxisLabel=$(echo $labels | cut -d " " -f2)
+    labels=$(echo $labels | cut -d " " -f3-)
+    
+    local gnuplotFile=$(mktemp)
+    echo "set term x11 1 font \"helvetica,17\" linewidth 1.5 persist noraise" > $gnuplotFile
+    echo "set logscale y" >> $gnuplotFile
+    echo "set title \"Residuals\"" >> $gnuplotFile
+    echo "set xlabel \"$xAxisLabel\"" >> $gnuplotFile
+    echo "while (1) {" >> $gnuplotFile
+    echo "plot \\" >> $gnuplotFile
+    local field
+    local line
+    i=1
+    for field in $labels; do
+        i=$(expr $i + 1)
+        line="\"$logFile\" using 1:${i} with lines title \"$field\""
+        if [ $i -lt $numColumn ]; then
+           line="$line, \\"
+        fi
+        echo $line >> $gnuplotFile
+    done
+    echo "pause 1" >> $gnuplotFile
+    echo "}" >> $gnuplotFile
+    
+    touch $logFile
+    gnuplot $gnuplotFile &
+    local gnuplotPID=$!
+    
+    while ps -p $solverPID > /dev/null; do
+        sleep 1
+    done
+    
+    sleep 5
+    kill -9 $gnuplotPID
+    rm $gnuplotFile
+}
+optionOld=$OPTIND
+OPTIND=1
+onlyMesh=false
+yesAll=false
+while getopts "ihmy-:" opt; do
+    case "$opt" in
+    -)
+        case "${OPTARG}" in
+            info) show_info;;
+            help) show_help;;
+            onlyMesh) onlyMesh=true;;
+            yes) yesAll=true;;
+        esac ;;
+    i) show_info;;
+    h) show_help;;
+    m) onlyMesh=true;;
+    y) yesAll=true;;
+    esac
+done
+shift $((OPTIND-1))
+OPTIND=$optionOld
+if [ "${WM_PROJECT_VERSION}" != "12" ] && [ "$yesAll" = false ]; then
+    YELLOW='\033[0;33m'
+    NC='\033[0m'
+    if [ -z "$WM_PROJECT_VERSION" ]; then
+        echo "${{YELLOW}}Warning! OpenFOAM was not found on your system. The execution process may fail.${{NC}}"
+    else
+        echo "${YELLOW}Warning! OpenFOAM ${WM_PROJECT_VERSION} was found on your system. The case files were exported for OpenFOAM 12 and the execution process may fail.${NC}"
+    fi
+    read -p "Do you want to continue? (y/N): " yn
+    case "$yn" in
+        [yY]*) ;;
+        *) exit 1;;
+    esac
+fi
+runApplication blockMesh
+runApplication surfaceFeatures
+
+runApplication -s "meshing" decomposePar
+runParallel snappyHexMesh -overwrite
+runApplication -s "meshing" reconstructPar -constant
+rm -rf ./processor*
+if [ "$onlyMesh" = true ] ; then
+    exit 0
+fi
+
+runApplication decomposePar
+residualsFile="postProcessing/residuals(U,p)/0/residuals.dat"
+if [ -f $residualsFile ] ; then
+    rm -f $residualsFile
+fi
+if [ -n "$DISPLAY" ] && [ -x "$(command -v gnuplot)" ]; then
+    runParallel $(getApplication) &
+    monitor $! $residualsFile
+else
+    runParallel $(getApplication)
+fi
+runApplication reconstructPar
+rm -rf ./processor*

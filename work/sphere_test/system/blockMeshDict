@@ -1,0 +1,50 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+
+// 単位（1.0 = 1メートル）
+convertToMeters 1;
+
+// 頂点の定義（0〜7番のインデックス）
+vertices
+(
+    (-0.5 -0.5 -0.5) // 0
+    ( 0.5 -0.5 -0.5) // 1
+    ( 0.5  0.5 -0.5) // 2
+    (-0.5  0.5 -0.5) // 3
+    (-0.5 -0.5  0.5) // 4
+    ( 0.5 -0.5  0.5) // 5
+    ( 0.5  0.5  0.5) // 6
+    (-0.5  0.5  0.5) // 7
+);
+
+// ブロックの定義
+blocks
+(
+    // 頂点0〜7をつなぎ、x, y, z方向にそれぞれ20分割する
+    hex (0 1 2 3 4 5 6 7) (20 20 20) simpleGrading (1 1 1)
+);
+
+edges ();
+
+// 境界条件（壁などの名前付け）
+boundary
+(
+    walls
+    {
+        type wall;
+        faces
+        (
+            (3 7 6 2) // top
+            (0 4 7 3) // left
+            (2 6 5 1) // right
+            (1 5 4 0) // bottom
+            (0 3 2 1) // front
+            (4 5 6 7) // back
+        );
+    }
+);

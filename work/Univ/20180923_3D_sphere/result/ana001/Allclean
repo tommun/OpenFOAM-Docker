@@ -1,0 +1,44 @@
+#!/bin/sh
+cd ${0%/*} || exit 1
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+show_help() {
+    echo "Usage: Allclean [OPTIONS]"
+    echo "options:"
+    echo "  -h, --help      print the usage"
+    echo "  -y, --yes       enter yes for all checks"
+    echo ""
+    exit 1
+}
+optionOld=$OPTIND
+OPTIND=1
+yesAll=false
+while getopts "hy-:" opt; do
+    case "$opt" in
+    -)
+        case "${OPTARG}" in
+            help) show_help;;
+            yes) yesAll=true;;
+        esac ;;
+    h) show_help;;
+    y) yesAll=true;;
+    esac
+done
+shift $((OPTIND-1))
+OPTIND=$optionOld
+if [ "${WM_PROJECT_VERSION}" != "13" ] && [ "$yesAll" = false ]; then
+    YELLOW='\033[0;33m'
+    NC='\033[0m'
+    if [ -z "$WM_PROJECT_VERSION" ]; then
+        echo "${{YELLOW}}Warning! OpenFOAM was not found on your system. The execution process may fail.${{NC}}"
+    else
+        echo "${YELLOW}Warning! OpenFOAM ${WM_PROJECT_VERSION} was found on your system. The case files were exported for OpenFOAM 13 and the execution process may fail.${NC}"
+    fi
+    read -p "Do you want to continue? (y/N): " yn
+    case "$yn" in
+        [yY]*) ;;
+        *) exit 1;;
+    esac
+fi
+
+rm -rf constant/extendedFeatureEdgeMesh > /dev/null 2>&1
+cleanCase

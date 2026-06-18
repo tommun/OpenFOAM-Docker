@@ -1,0 +1,47 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    0;
+    object      U;
+}
+dimensions [0 1 -1 0 0 0 0];
+internalField uniform (5e-05 0.0 0.0);
+boundaryField
+{
+    Region
+    {
+        type fixedValue;
+        value uniform (0 0 0);
+    }
+    XMin
+    {
+        type fixedValue;
+        value uniform (5e-05 0 0);
+    }
+    XMax
+    {
+        type zeroGradient;
+    }
+    YMin
+    {
+        type slip;
+    }
+    YMax
+    {
+        type slip;
+    }
+    ZMin
+    {
+        type slip;
+    }
+    ZMax
+    {
+        type slip;
+    }
+    defaultFaces
+    {
+        type slip;
+    }
+}

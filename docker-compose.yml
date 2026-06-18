@@ -3,17 +3,15 @@ version: '3.8'
 services:
   openfoam:
     build: .
-    image: openfoam-gui:13
+    image: openfoam-cli:13
     container_name: openfoam13-container
-    ports:
-      - "6080:6080"
     volumes:
       - ./work:/home/foam/work
       - ./gdrive:/home/foam/gdrive
       - ./config/rclone:/home/foam/.config/rclone
       # GitHub用のSSHキーを共有したい場合は、以下のコメントを外してください
       # - ${HOME}/.ssh:/home/foam/.ssh:ro
-    environment:
-      - DISPLAY=:1
-    shm_size: '2gb' # OpenFOAMの並列計算やGUIのために共有メモリを増やす
+    shm_size: '2gb' # OpenFOAMの並列計算のために共有メモリを確保
     restart: unless-stopped
+    stdin_open: true # docker attach用
+    tty: true        # docker attach用

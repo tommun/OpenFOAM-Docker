@@ -1,0 +1,64 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// 外部STLの代わりにここで「球」を定義します
+geometry
+{
+    sphere_geo
+    {
+        type    sphere;
+        centre  (0 0 0);
+        radius  0.4; // 立方体の1辺が1.0なので、少し小さめに設定
+    }
+};
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+castellatedMeshControls
+{
+    maxLocalCells 1000000;
+    maxGlobalCells 2000000;
+    minRefinementCells 10;
+    nCellsBetweenLevels 1;
+
+    refinementSurfaces
+    {
+        sphere_geo
+        {
+            level (4 4); // ここで球の表面のメッシュを細かくします
+        }
+    }
+
+    refinementRegions
+    {
+        sphere_geo
+        {
+            mode inside;
+            levels ((1.0 4));
+        }
+    }
+
+    // 球の内側か外側、どちらを残すかの指定
+    // (0.45 0.45 0.45) は球の外側なので、球の「穴」が空いたメッシュになります
+    locationInMesh (0.45 0.45 0.45); 
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 30;
+    nRelaxIter 5;
+}
+
+addLayersControls {}
+meshQualityControls {}
+
+mergeTolerance 1e-6;
