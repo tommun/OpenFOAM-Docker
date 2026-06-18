@@ -7,12 +7,12 @@
 \*---------------------------------------------------------------------------*/
 Build  : 13-441953dfbb42
 Exec   : surfaceFeatures
-Date   : Jun 03 2026
-Time   : 03:21:44
-Host   : "f10fa328edb5"
-PID    : 1110
+Date   : Jun 15 2026
+Time   : 05:24:42
+Host   : "8ce0d8f18ad9"
+PID    : 257
 I/O    : uncollated
-Case   : /home/foam/work/Univ/20180923_3D_sphere/result/ana00101/ana00101
+Case   : /home/foam/case
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
@@ -64,7 +64,7 @@ edge classification :
 
 Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/Cuboid.extendedFeatureEdgeMesh"
 
-Writing extendedEdgeMesh components to "/home/foam/work/Univ/20180923_3D_sphere/result/ana00101/ana00101/constant/extendedFeatureEdgeMesh/Cuboid"
+Writing extendedEdgeMesh components to "/home/foam/case/constant/extendedFeatureEdgeMesh/Cuboid"
 
 Writing featureEdgeMesh to "constant/triSurface/Cuboid.eMesh"
 
@@ -109,11 +109,11 @@ edge classification :
 
 Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/model2.extendedFeatureEdgeMesh"
 
-Writing extendedEdgeMesh components to "/home/foam/work/Univ/20180923_3D_sphere/result/ana00101/ana00101/constant/extendedFeatureEdgeMesh/model2"
+Writing extendedEdgeMesh components to "/home/foam/case/constant/extendedFeatureEdgeMesh/model2"
 
 Writing featureEdgeMesh to "constant/triSurface/model2.eMesh"
 
-ExecutionTime = 0.141221 s  ClockTime = 0 s
+ExecutionTime = 0.138654 s  ClockTime = 0 s
 
 End
 

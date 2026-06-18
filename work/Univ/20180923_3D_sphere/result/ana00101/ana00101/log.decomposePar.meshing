@@ -7,12 +7,12 @@
 \*---------------------------------------------------------------------------*/
 Build  : 13-441953dfbb42
 Exec   : decomposePar
-Date   : Jun 03 2026
-Time   : 03:21:44
-Host   : "f10fa328edb5"
-PID    : 1111
+Date   : Jun 15 2026
+Time   : 05:24:42
+Host   : "8ce0d8f18ad9"
+PID    : 258
 I/O    : uncollated
-Case   : /home/foam/work/Univ/20180923_3D_sphere/result/ana00101/ana00101
+Case   : /home/foam/case
 nProcs : 1
 sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
@@ -25,7 +25,7 @@ Calculating distribution of cells
 
 Selecting decomposer scotch
 
-Finished decomposition in 0.022259 s
+Finished decomposition in 0.024376 s
 
 Calculating original mesh data
 
