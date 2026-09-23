@@ -1,0 +1,37 @@
+#!/bin/bash
+# ==============================================================================
+# OpenFOAM ThinkPad Clean-up Script (Allclean)
+# ==============================================================================
+# 目的: 計算結果・一時メッシュ・ログを完全に削除し、SSD容量を即座に解放する
+# ==============================================================================
+
+echo "=========================================="
+echo " Cleaning OpenFOAM Case: $(pwd)"
+echo "=========================================="
+
+# 1. タイムディレクトリ（結果データ）の削除
+echo "--> Removing time directories..."
+rm -rf -- [1-9]* 0.* -0.* 2>/dev/null || true
+
+# 2. 0.orig がある場合は、計算時に生成された 0 ディレクトリも削除
+if [ -d "0.orig" ]; then
+    echo "--> 0.orig/ detected. Removing generated 0/ directory..."
+    rm -rf 0
+fi
+
+# 3. メッシュデータの削除
+echo "--> Removing generated mesh data..."
+rm -rf constant/polyMesh dynamicCode
+
+# 4. 可視化・ポスト処理データの削除
+echo "--> Removing VTK, postProcessing, and dummy foam files..."
+rm -rf VTK postProcessing *.foam
+
+# 5. 並列計算分割データおよびログファイルの削除
+echo "--> Removing processor directories and logs..."
+rm -rf processor* log.* logSummary.* 2>/dev/null || true
+
+echo "=========================================="
+echo " Cleanup complete! Disk space freed."
+echo " Ready for Git commit / push."
+echo "=========================================="

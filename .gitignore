@@ -1,15 +1,57 @@
-# Docker data
+# ==============================================================================
+# OpenFOAM .gitignore
+# ==============================================================================
+
+# --- タイムディレクトリ（計算結果: 数字で始まるフォルダや小数点を含むフォルダ） ---
+[1-9]*
+0.*
+-0.*
+**/[1-9]*/
+**/0.*/
+**/-0.*/
+
+# --- メッシュデータ ---
+constant/polyMesh/
+**/constant/polyMesh/
+**/polyMesh/
+dynamicCode/
+**/dynamicCode/
+
+# --- 可視化・ポスト処理データ ---
+VTK/
+**/VTK/
+postProcessing/
+**/postProcessing/
+*.obj
+*.vtk
+*.foam
+
+# --- ログファイル・並列計算分割フォルダ ---
+log.*
+**/log.*
+logSummary.*
+**/logSummary.*
+processor*/
+**/processor*/
+
+# --- 大容量アーカイブ・バックアップファイル ---
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
+*.FCBak
+
+# --- Docker & Rclone 関連 ---
 .docker/
+config/rclone/rclone.conf
 
-# OpenFOAM large data / mesh / results
-# 計算結果（大量のデータ）をGit管理から外したい場合は、以下のコメントを外してください
-# work/platforms/
-# work/postProcessing/
-# **/polyMesh/
-
-# OS specific files
+# --- OS・エディタ固有ファイル ---
 .DS_Store
 Thumbs.db
-
-# Rclone config (Contains credentials)
-config/rclone/rclone.conf
+desktop.ini
+*.swp
+*~
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

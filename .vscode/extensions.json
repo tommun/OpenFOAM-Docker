@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "openfoam.openfoam",
+    "ms-vscode-remote.remote-ssh",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.cpptools"
+  ]
+}

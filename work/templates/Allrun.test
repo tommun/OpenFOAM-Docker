@@ -1,0 +1,59 @@
+#!/bin/bash
+# ==============================================================================
+# OpenFOAM ThinkPad Test-Run Script (Allrun.test)
+# ==============================================================================
+# 目的: ThinkPad上で粗いメッシュと短時間ステップで計算がエラーなく回るかテストする
+# ==============================================================================
+
+set -e
+
+# OpenFOAM環境のロード（もし未ロードの場合）
+if [ -z "$WM_PROJECT_DIR" ]; then
+    if [ -f /opt/openfoam13/etc/bashrc ]; then
+        source /opt/openfoam13/etc/bashrc
+    fi
+fi
+
+echo "=========================================="
+echo " Starting ThinkPad Quick Test Run"
+echo " Case: $(pwd)"
+echo "=========================================="
+
+# 1. 0.orig から 0 ディレクトリを安全に準備
+if [ -d "0.orig" ]; then
+    echo "--> Preparing 0/ from 0.orig/ ..."
+    rm -rf 0
+    cp -r 0.orig 0
+elif [ ! -d "0" ]; then
+    echo "Warning: Neither 0.orig nor 0 found. Continuing..."
+fi
+
+# 2. メッシュ生成 (blockMesh)
+if [ -f "system/blockMeshDict" ]; then
+    echo "--> Running blockMesh..."
+    blockMesh > log.blockMesh 2>&1
+fi
+
+# 3. テスト計算の実行
+# controlDictからapplication名（ソルバー名）を取得
+SOLVER=$(grep -E '^[ \t]*application' system/controlDict | awk '{print $2}' | tr -d '";')
+
+if [ -z "$SOLVER" ]; then
+    echo "Error: application (solver) not found in system/controlDict"
+    exit 1
+fi
+
+echo "--> Detected solver: $SOLVER"
+echo "--> Running $SOLVER for quick test..."
+
+# ソルバーの実行
+$SOLVER > "log.$SOLVER" 2>&1
+
+echo "=========================================="
+echo " Test Run Completed Successfully!"
+echo " Check log: log.$SOLVER"
+echo " To view with ParaView, run:"
+echo "   touch $(basename $(pwd)).foam"
+echo " To clean up and save disk space, run:"
+echo "   ./Allclean"
+echo "=========================================="

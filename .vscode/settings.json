@@ -1,0 +1,15 @@
+{
+  "files.associations": {
+    "*Dict": "openfoam",
+    "*Properties": "openfoam",
+    "controlDict": "openfoam",
+    "fvSchemes": "openfoam",
+    "fvSolution": "openfoam",
+    "blockMeshDict": "openfoam",
+    "snappyHexMeshDict": "openfoam",
+    "decomposeParDict": "openfoam"
+  },
+  "files.eol": "\n",
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true
+}
